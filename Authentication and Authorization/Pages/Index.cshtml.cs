@@ -7,7 +7,10 @@ namespace Authentication_and_Authorization.Pages
     {
         public void OnGet()
         {
+            // moge postawic brakepoint na wysokosci poczatku tej funkcji i w watch wpisac base.User aby otrzymac informacje dotyczace Identity/Claims.
+            // dla szczegu³ów base.User.Identity
 
         }
+        
     }
 }

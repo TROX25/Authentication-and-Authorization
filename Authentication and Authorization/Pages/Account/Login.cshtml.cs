@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 
 namespace Authentication_and_Authorization.Pages.Account
 {
@@ -14,9 +16,31 @@ namespace Authentication_and_Authorization.Pages.Account
         public void OnGet()
         {
         }
-        public void OnPost()
+        public async Task<IActionResult> OnPost()
         {
-            // jesli postawie tu brakepoint i watch wpisze this.Cridential to zobacze wartosci wpisane w formularzu (haslo i login)
+            // jesli postawie tu brakepoint i watch wpisze this.Cridential w watch to zobacze wartosci wpisane w formularzu (haslo i login)
+
+            if (!ModelState.IsValid) return Page();
+
+            if(Cridential.UserName == "admin" && Cridential.Password == "admin")
+            {
+                //zalogowano
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, "admin"),
+                    new Claim(ClaimTypes.Email, "admin@gmail.com")
+                };
+                var identity = new ClaimsIdentity(claims, "MyCookieAuth");
+                ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(identity);
+
+                await HttpContext.SignInAsync("MyCookieAuth", claimsPrincipal);
+
+                return RedirectToPage("/Index");
+            }
+            else
+            {
+                return Page();
+            }
 
         }
     }

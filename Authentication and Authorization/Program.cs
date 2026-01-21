@@ -1,3 +1,5 @@
+using System.Security.Claims;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -11,6 +13,7 @@ builder.Services.AddAuthentication().AddCookie("MyCookieAuth", options =>
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("MustBelongToHRDepartment", policy => policy.RequireClaim("Department", "HR"));
+    options.AddPolicy("MustBeAdmin", policy => policy.RequireClaim("Admin"));
 });
 
 var app = builder.Build();

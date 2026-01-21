@@ -15,6 +15,7 @@ namespace Authentication_and_Authorization.Pages.Account
 
         public void OnGet()
         {
+
         }
         public async Task<IActionResult> OnPost()
         {

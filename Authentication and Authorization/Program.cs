@@ -5,6 +5,8 @@ builder.Services.AddRazorPages();
 builder.Services.AddAuthentication().AddCookie("MyCookieAuth", options =>
 {
     options.Cookie.Name = "MyCookieAuth";
+    // moge uzyc accessdeniedpath aby przekierowac uzytkownika w przypadku braku uprawnien do danej strony
+    // options.AccessDeniedPath = "/Account/AccessDenied";
 });
 builder.Services.AddAuthorization(options =>
 {

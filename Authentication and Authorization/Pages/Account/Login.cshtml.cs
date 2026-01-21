@@ -34,6 +34,7 @@ namespace Authentication_and_Authorization.Pages.Account
                 {
                     new Claim(ClaimTypes.Name, "admin"),
                     new Claim(ClaimTypes.Email, "admin@gmail.com")
+                    new Claim("Department", "HR")
                 };
                 var identity = new ClaimsIdentity(claims, "MyCookieAuth");
                 ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(identity);

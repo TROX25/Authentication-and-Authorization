@@ -25,6 +25,10 @@ namespace Authentication_and_Authorization.Pages.Account
             if(Cridential.UserName == "admin" && Cridential.Password == "admin")
             {
                 //zalogowano
+
+                // claims opisuja informacje i uprawnienia (Name/Role) uzytkownikow a NIE SEKRETY, dlatego nie zapisuje tu hasla
+                // Jeœli potrzebuje to moge zrobic swoje Claimy -> new Claim("UserId", user.Id.ToString()) albo new Claim("Department", "IT")
+
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, "admin"),
@@ -37,11 +41,7 @@ namespace Authentication_and_Authorization.Pages.Account
 
                 return RedirectToPage("/Index");
             }
-            else
-            {
-                return Page();
-            }
-
+            return Page();
         }
     }
 

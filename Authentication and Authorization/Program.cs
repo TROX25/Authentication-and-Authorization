@@ -1,3 +1,5 @@
+using Authentication_and_Authorization.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,8 +20,11 @@ builder.Services.AddAuthorization(options =>
     {
         policy.RequireClaim("Department", "HR");
         policy.RequireClaim("Manager");
+        policy.Requirements.Add(new HRManagerProbationRequirement(3));
     });
 });
+
+builder.Services.AddSingleton<IAuthorizationHandler, HRManagerProbationRequirementHandler>();
 
 var app = builder.Build();
 

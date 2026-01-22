@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Authentication_and_Authorization.Pages
 {
-    [Authorize(Roles = "HRManager")]
+    [Authorize(Policy = "HRManagerOnly")]
     public class HRManagerModel : PageModel
     {
         public void OnGet()

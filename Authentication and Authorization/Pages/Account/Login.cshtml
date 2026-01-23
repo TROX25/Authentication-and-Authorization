@@ -23,7 +23,14 @@
                 <span class="text-danger" asp-validation-for="Cridential.Password"></span>
             </div>
         </div>
-
+        <div class="row mb-3 form-check">
+            <div class="col-2">
+                <input type="checkbox" asp-for="Cridential.RememberMe" class="form-check-input" />
+                <label asp-for="Cridential.RememberMe" class="form-check-label"></label>
+            </div>
+            <div class="col-5">
+            </div>
+        </div>
         <div class="row mb-3">
             <div class="col-2">
                 <input type="submit" value="Login" class="btn btn-primary" />

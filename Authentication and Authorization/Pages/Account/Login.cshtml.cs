@@ -42,7 +42,12 @@ namespace Authentication_and_Authorization.Pages.Account
                 var identity = new ClaimsIdentity(claims, "MyCookieAuth");
                 ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(identity);
 
-                await HttpContext.SignInAsync("MyCookieAuth", claimsPrincipal);
+                var authProperties = new AuthenticationProperties
+                {
+                    IsPersistent = Cridential.RememberMe // jezeli uzytkownik zaznaczyl "Remember Me" to cookie bedzie trwalsze
+                };
+
+                await HttpContext.SignInAsync("MyCookieAuth", claimsPrincipal, authProperties);
 
                 return RedirectToPage("/Index");
             }
@@ -58,5 +63,8 @@ namespace Authentication_and_Authorization.Pages.Account
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; } = string.Empty;
+
+        [Display(Name = "Remember Me")]
+        public bool RememberMe { get; set; }
     }
 }

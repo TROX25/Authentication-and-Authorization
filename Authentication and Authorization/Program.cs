@@ -11,6 +11,10 @@ builder.Services.AddAuthentication().AddCookie("MyCookieAuth", options =>
     options.Cookie.Name = "MyCookieAuth";
     // moge uzyc accessdeniedpath aby przekierowac uzytkownika w przypadku braku uprawnien do danej strony
     // options.AccessDeniedPath = "/Account/AccessDenied";
+
+    // po 30 minutach bedzie sie trzeba znowu zalogowac. W przypadku zakniecia przegladarki cookie zniknie i bedzie trzeba sie znowu zalogowac
+    // Trzeba dodatkowo ustawic persistent cookie jesli u¿ytkownik zaznaczy "Remember Me"
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
 });
 builder.Services.AddAuthorization(options =>
 {

@@ -30,6 +30,12 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddSingleton<IAuthorizationHandler, HRManagerProbationRequirementHandler>();
 
+// Rejestracja HttpClient do komunikacji z Web API w celu pobrania danych o pogodzie
+builder.Services.AddHttpClient("TestWebAPI", client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7026/");
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

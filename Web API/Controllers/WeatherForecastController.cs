@@ -11,6 +11,7 @@ namespace Web_API.Controllers
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         ];
 
+
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
@@ -21,6 +22,15 @@ namespace Web_API.Controllers
                 Summary = Summaries[Random.Shared.Next(Summaries.Length)]
             })
             .ToArray();
+
+            // I tak poka¿e sie wszystko co jest w WeatherForecast, czyli w³¹cznie z TemperatureF
+            // Jeœli tego nie chcemy, to musimy stworzyæ osobn¹ klasê DTO i zwracaæ j¹ zamiast oryginalnej klasy
+            // public record WeatherForecastDto(
+            // DateOnly Date,
+            // int TemperatureC,
+            // string? Summary);
+
+            // albo u¿yæ atrybutu [JsonIgnore] na w³aœciwoœci, któr¹ chcemy pomin¹æ w serializacji JSON
         }
     }
 }

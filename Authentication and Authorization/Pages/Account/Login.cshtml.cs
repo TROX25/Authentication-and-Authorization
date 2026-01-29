@@ -17,7 +17,7 @@ namespace Authentication_and_Authorization.Pages.Account
         {
 
         }
-        public async Task<IActionResult> OnPost()
+        public async Task<IActionResult> OnPostAsync()
         {
             // jesli postawie tu brakepoint i watch wpisze this.Cridential w watch to zobacze wartosci wpisane w formularzu (haslo i login)
 

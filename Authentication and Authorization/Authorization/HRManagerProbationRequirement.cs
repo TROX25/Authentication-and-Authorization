@@ -4,12 +4,11 @@ namespace Authentication_and_Authorization.Authorization
 {
     public class HRManagerProbationRequirement : IAuthorizationRequirement
     {
+        public int ProbationMonths { get; }
         public HRManagerProbationRequirement(int probationMonths)
         {
             ProbationMonths = probationMonths;
         }
-
-        public int ProbationMonths { get; }
     }
     public class HRManagerProbationRequirementHandler : AuthorizationHandler<HRManagerProbationRequirement>
     {

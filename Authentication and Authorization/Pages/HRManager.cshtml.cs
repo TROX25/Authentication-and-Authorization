@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Authentication_and_Authorization.Pages
 {
-    //[Authorize(Policy = "HRManagerOnly")]
+    [Authorize(Policy = "HRManagerOnly")]
     public class HRManagerModel : PageModel
     {
         private readonly IHttpClientFactory httpClientFactory;

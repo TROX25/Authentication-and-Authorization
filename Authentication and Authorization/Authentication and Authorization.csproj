@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>Authentication_and_Authorization</RootNamespace>
+    <UserSecretsId>72998a8a-1e40-4894-ae5a-9e9662292f96</UserSecretsId>
   </PropertyGroup>
 
 </Project>

@@ -79,11 +79,12 @@ namespace Web_API.Controllers
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 SigningCredentials = new SigningCredentials(
-                    new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(configuration["SecretKey"]?? throw new InvalidOperationException("SecretKey is missing");)),
+                    new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(configuration["SecretKey"]?? throw new InvalidOperationException("SecretKey is missing"))),
                     SecurityAlgorithms.HmacSha256Signature),
                 Claims = claimsDic,
                 Expires = expiresAt,
-                NotBefore = DateTime.UtcNow
+                NotBefore = DateTime.UtcNow,
+                
 
             };
 

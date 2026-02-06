@@ -15,13 +15,14 @@ builder.Services.AddAuthentication()
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            //ValidateAudience = true,
+            ValidateAudience = false,
             //ValidAudience = "myapi",
-            //ValidateIssuer = true,
+            ValidateIssuer = false,
             //ValidIssuer = "myapp",
             ValidateLifetime = true,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretkey ?? string.Empty)),
-            ValidateIssuerSigningKey = true
+            ValidateIssuerSigningKey = true,
+            ClockSkew = TimeSpan.Zero
         };
     });
 

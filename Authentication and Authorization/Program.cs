@@ -1,6 +1,5 @@
 using Authentication_and_Authorization.Authorization;
 using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +35,7 @@ builder.Services.AddHttpClient("TestWebAPI", client =>
     client.BaseAddress = new Uri("https://localhost:7026/");
 });
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -50,6 +50,7 @@ app.UseHttpsRedirection();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();

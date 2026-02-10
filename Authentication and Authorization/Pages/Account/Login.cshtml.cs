@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
+using static Authentication_and_Authorization.Constants.AuthSchemes;
 
 namespace Authentication_and_Authorization.Pages.Account
 {
@@ -39,7 +40,7 @@ namespace Authentication_and_Authorization.Pages.Account
                     new Claim("Manager", "true"),
                     new Claim("EmploymentDate", "2025-01-01")
                 };
-                var identity = new ClaimsIdentity(claims, "MyCookieAuth");
+                var identity = new ClaimsIdentity(claims, MyCookie);
                 ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(identity);
 
                 var authProperties = new AuthenticationProperties
@@ -47,7 +48,7 @@ namespace Authentication_and_Authorization.Pages.Account
                     IsPersistent = Cridential.RememberMe // jezeli uzytkownik zaznaczyl "Remember Me" to cookie bedzie trwalsze
                 };
 
-                await HttpContext.SignInAsync("MyCookieAuth", claimsPrincipal, authProperties);
+                await HttpContext.SignInAsync(MyCookie, claimsPrincipal, authProperties);
 
                 return RedirectToPage("/Index");
             }

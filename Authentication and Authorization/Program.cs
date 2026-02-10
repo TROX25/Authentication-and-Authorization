@@ -1,13 +1,15 @@
 using Authentication_and_Authorization.Authorization;
 using Microsoft.AspNetCore.Authorization;
+using static Authentication_and_Authorization.Constants.AuthSchemes;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddAuthentication().AddCookie("MyCookieAuth", options =>
+builder.Services.AddAuthentication().AddCookie(MyCookie, options =>
 {
-    options.Cookie.Name = "MyCookieAuth";
+    options.Cookie.Name = MyCookie;
     // moge uzyc accessdeniedpath aby przekierowac uzytkownika w przypadku braku uprawnien do danej strony
     // options.AccessDeniedPath = "/Account/AccessDenied";
 

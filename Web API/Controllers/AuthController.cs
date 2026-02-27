@@ -26,6 +26,11 @@ namespace Web_API.Controllers
         [HttpPost] // Auth: JWT
         public IActionResult Authenticate([FromBody]Credential credential)
         {
+            if (credential == null)
+            {
+                return BadRequest("Invalid request. Please provide valid credentials.");
+            }
+
             if (credential.UserName == "admin" && credential.Password == "admin")
             {
                 //zalogowano

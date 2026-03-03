@@ -17,7 +17,11 @@ namespace Authentication_and_Authorization.Pages
         }
         public async Task OnGetAsync()
         {
+            // tak samo jak client z program.cs
             var client = httpClientFactory.CreateClient("TestWebAPI");
+            // DODAJE authentykację do żądania HTTP, aby uzyskać dostęp do chronionego zasobu w WebAPI.
+
+            // WeatherForecast to nazwa kontrolera w WebAPI, który zwraca dane pogodowe. Musi być zgodna z nazwą kontrolera w WebAPI (WeatherForecastController).
             weatherForecastItems = await client.GetFromJsonAsync<List<WeatherForecastDTO>>("WeatherForecast");
         }
     }

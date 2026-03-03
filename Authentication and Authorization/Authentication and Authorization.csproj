@@ -8,4 +8,12 @@
     <UserSecretsId>0a47f2a9-2465-4f9d-81f2-5fc7bd10ab3c</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Web API\Web API.csproj" />
+  </ItemGroup>
+
 </Project>

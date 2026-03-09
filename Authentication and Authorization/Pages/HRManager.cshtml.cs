@@ -22,8 +22,7 @@ namespace Authentication_and_Authorization.Pages
         }
         public async Task OnGetAsync()
         {
-
-            // 1. Jesli mamy juz token to nie musze sie za kazdym razem autentykowac, moge go pobrac z Seassion
+            // 1. Jesli mamy juz token to nie musze sie za kazdym razem autentykowac, moge go pobrac z Seassion Cookie
 
             JwtToken token = new JwtToken();
             // nazwa access_token jest dowolna, ale musi być taka sama jak ta, której używamy do przechowywania tokena w sesji.
@@ -33,7 +32,7 @@ namespace Authentication_and_Authorization.Pages
             if (string.IsNullOrEmpty(strTokenObj))
             {
                 // Authentication and getting a token from WebAPI
-                await AuthenticateAndGetTokenAsync();
+                token = await AuthenticateAndGetTokenAsync();
             }
             else
             {
@@ -43,7 +42,7 @@ namespace Authentication_and_Authorization.Pages
             if (token == null || token.ExpiresAt <= DateTime.Now || string.IsNullOrWhiteSpace(token.AccessToken))
             {
                 // Jeśli token wgasł albo jest z nim jakis inny problem to znów musze go pobrać z WebAPI, czyli muszę się autentykować i pobrać nowy token.
-                await AuthenticateAndGetTokenAsync();
+                token = await AuthenticateAndGetTokenAsync();
             }
 
             var client = httpClientFactory.CreateClient("TestWebAPI");
@@ -59,10 +58,14 @@ namespace Authentication_and_Authorization.Pages
             var client = httpClientFactory.CreateClient("TestWebAPI");
             // DODAJE authentykację do żądania HTTP, aby uzyskać dostęp do chronionego zasobu w WebAPI. Musze zrobic post Credential
             var response = await client.PostAsJsonAsync("Auth", new Credential { UserName = "admin", Password = "admin" });
-            // Sprawdza, czy odpowiedź HTTP jest sukcesem (status code 2xx). Jeśli nie, to rzuca wyjątek.
+            // Sprawdzam, czy odpowiedź HTTP jest sukcesem (status code 2xx). Jeśli nie, to rzuca wyjątek.
             response.EnsureSuccessStatusCode();
             // Odczytuje zawartość odpowiedzi HTTP jako string, który powinien zawierać token JWT (JSON Web Token) zwrócony przez endpoint "Auth" w WebAPI. 
             string jwt = await response.Content.ReadAsStringAsync();
+
+            // jesli juz mam token to chce go zapisać w session
+            HttpContext.Session.SetString("access_token", jwt);
+
             // musze go desserializowac do formatu objektowego, aby móc go użyć w nagłówku autoryzacji.
             return JsonConvert.DeserializeObject<JwtToken>(jwt) ?? new JwtToken();
         }

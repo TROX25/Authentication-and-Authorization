@@ -18,6 +18,13 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
     options.Password.RequireUppercase = true;
     options.Password.RequireNonAlphanumeric = true;
     options.Password.RequiredLength = 6;
+
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+
+    options.User.RequireUniqueEmail = true;
+
+    options.SignIn.RequireConfirmedPhoneNumber = true;
 })
     .AddEntityFrameworkStores<ApplicationDbContext>();
 

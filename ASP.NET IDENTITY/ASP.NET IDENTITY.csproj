@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>ASP.NET_IDENTITY</RootNamespace>
+    <UserSecretsId>3ffea954-2232-4148-ac0f-f9cc9069cd05</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

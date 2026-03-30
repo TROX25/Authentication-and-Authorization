@@ -39,6 +39,7 @@ namespace ASP.NET_IDENTITY.Pages.Account
 
             if (result.Succeeded)
             {
+                // Index Page is protected with [Authorize]
                 return RedirectToPage("/Index");
             }
             else

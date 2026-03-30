@@ -1,18 +1,23 @@
+using ASP.NET_IDENTITY.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Net;
+using System.Net.Mail;
 
 namespace ASP.NET_IDENTITY.Pages.Account
 {
     public class RegisterModel : PageModel
     {
         private readonly UserManager<IdentityUser> userManager;
+        private readonly IEmailService emailService;
 
-        public RegisterModel(UserManager<IdentityUser> userManager)
+        public RegisterModel(UserManager<IdentityUser> userManager, IEmailService emailService)
         {
             this.userManager = userManager;
+            this.emailService = emailService;
         }
 
         [BindProperty]
@@ -46,6 +51,20 @@ namespace ASP.NET_IDENTITY.Pages.Account
             }
             else
             {
+                // Tworzę mechanizm potwierdzenia adresu email przy rejestracji
+                var token = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
+                // Wygeneruj link do potwierdzenia emaila i wyślij go do użytkownika (np. przez email)
+                var confirmationLink = Url.PageLink("/Account/ConfirmEmail",  
+                    values: new { userId = user.Id, token });
+                // SMTP SERWER -> przeniesiono do EmailService
+
+                await emailService.SendEmailAsync("pimalogik@gmail.com",
+                    user.Email,
+                     "Potwierdzenie rejestracji",
+                     $"Kliknij w link, aby potwierdzić rejestrację: {confirmationLink}");
+
+
+
                 return RedirectToPage("/Account/Login");
             }
 

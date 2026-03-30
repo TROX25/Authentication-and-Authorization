@@ -1,4 +1,6 @@
 using ASP.NET_IDENTITY.Data;
+using ASP.NET_IDENTITY.Services;
+using ASP.NET_IDENTITY.Settings;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,9 +26,11 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 
     options.User.RequireUniqueEmail = true;
 
-    options.SignIn.RequireConfirmedPhoneNumber = true;
+    options.SignIn.RequireConfirmedEmail = true;
 })
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    // Dodajemy domyślne tokeny, które będą używane do generowania tokenów dla operacji takich jak resetowanie hasła czy potwierdzenie emaila
+    .AddDefaultTokenProviders();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -34,8 +38,8 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.LogoutPath = "/Account/Logout";
     options.AccessDeniedPath = "/Account/AccessDenied";
 });
-
-
+builder.Services.Configure<SmtpSetting>(builder.Configuration.GetSection("SMTP"));
+builder.Services.AddTransient<IEmailService, EmailService>();
 
 
 var app = builder.Build();

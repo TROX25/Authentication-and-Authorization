@@ -1,16 +1,23 @@
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Net;
 
 namespace ASP.NET_IDENTITY.Pages.Account
 {
     public class LogoutModel : PageModel
     {
-        //public async Task<IActionResult> OnPostAsync()
-        //{
-        //    await HttpContext.SignOutAsync(MyCookie);
-        //    return RedirectToPage("/Index");
-        //}
+        private readonly SignInManager<IdentityUser> signInManager;
 
+        public LogoutModel(SignInManager<IdentityUser> signInManager)
+        {
+            this.signInManager = signInManager;
+        }
+        public async Task<IActionResult> OnPostAsync()
+        {
+            await signInManager.SignOutAsync();
+            return RedirectToPage("/account/login");
+        }
     }
 }

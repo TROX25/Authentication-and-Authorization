@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Net.Mail;
+using System.Security.Claims;
 
 namespace ASP.NET_IDENTITY.Pages.Account
 {
@@ -34,18 +35,21 @@ namespace ASP.NET_IDENTITY.Pages.Account
             {
                 return Page();
             }
-            // Tutaj dodaj logikę rejestracji użytkownika, np. zapis do bazy danych
             var user = new User
             {
                 Email = RegisterViewModel.Email,
                 UserName = RegisterViewModel.Email,
-                Department = RegisterViewModel.Department,
-                Position = RegisterViewModel.Position
             };
+
+            var claimDepartment = new Claim("Department", RegisterViewModel.Department);
+            var claimPosition = new Claim("Position", RegisterViewModel.Position);
 
             var result = await this.userManager.CreateAsync(user, RegisterViewModel.Password);
             if (!result.Succeeded)
             {
+                this.userManager.AddClaimAsync(user, claimDepartment).Wait();
+                this.userManager.AddClaimAsync(user, claimPosition).Wait();
+
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);

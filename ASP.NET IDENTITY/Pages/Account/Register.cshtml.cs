@@ -1,3 +1,4 @@
+using ASP.NET_IDENTITY.Data;
 using ASP.NET_IDENTITY.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -11,10 +12,10 @@ namespace ASP.NET_IDENTITY.Pages.Account
 {
     public class RegisterModel : PageModel
     {
-        private readonly UserManager<IdentityUser> userManager;
+        private readonly UserManager<User> userManager;
         private readonly IEmailService emailService;
 
-        public RegisterModel(UserManager<IdentityUser> userManager, IEmailService emailService)
+        public RegisterModel(UserManager<User> userManager, IEmailService emailService)
         {
             this.userManager = userManager;
             this.emailService = emailService;
@@ -34,10 +35,12 @@ namespace ASP.NET_IDENTITY.Pages.Account
                 return Page();
             }
             // Tutaj dodaj logikę rejestracji użytkownika, np. zapis do bazy danych
-            var user = new IdentityUser
+            var user = new User
             {
                 Email = RegisterViewModel.Email,
-                UserName = RegisterViewModel.Email
+                UserName = RegisterViewModel.Email,
+                Department = RegisterViewModel.Department,
+                Position = RegisterViewModel.Position
             };
 
             var result = await this.userManager.CreateAsync(user, RegisterViewModel.Password);
@@ -79,6 +82,12 @@ namespace ASP.NET_IDENTITY.Pages.Account
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; } = string.Empty;
+        [Required]
+        [DisplayName("Department")]
+        public string Department { get; set; } = string.Empty;
+        [Required]
+        [DisplayName("Position")]
+        public string Position { get; set; } = string.Empty;
     }
 
 

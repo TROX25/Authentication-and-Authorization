@@ -45,34 +45,39 @@ namespace ASP.NET_IDENTITY.Pages.Account
             var claimPosition = new Claim("Position", RegisterViewModel.Position);
 
             var result = await this.userManager.CreateAsync(user, RegisterViewModel.Password);
-            if (!result.Succeeded)
+            if (result.Succeeded)
             {
-                this.userManager.AddClaimAsync(user, claimDepartment).Wait();
-                this.userManager.AddClaimAsync(user, claimPosition).Wait();
 
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
-                return Page();
-            }
-            else
-            {
-                // Tworzę mechanizm potwierdzenia adresu email przy rejestracji
-                var token = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
-                // Wygeneruj link do potwierdzenia emaila i wyślij go do użytkownika (np. przez email)
-                var confirmationLink = Url.PageLink("/Account/ConfirmEmail",  
-                    values: new { userId = user.Id, token });
-                // SMTP SERWER -> przeniesiono do EmailService
+                await this.userManager.AddClaimAsync(user, claimDepartment);
+                await this.userManager.AddClaimAsync(user, claimPosition);
+
+                var confirmationToken = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
+
+                //return Redirect(Url.PageLink(pageName: "/Account/ConfirmEmail",
+                //    values: new { userId = user.Id, token = confirmationToken }) ?? "");
+
+                //////////////////////////////////////////////////////////////
+                // To trigger the email confirmation flow, use the code below
+                //////////////////////////////////////////////////////////////
+
+                var confirmationLink = Url.PageLink(pageName: "/Account/ConfirmEmail",
+                    values: new { userId = user.Id, token = confirmationToken }) ?? "";
 
                 await emailService.SendEmailAsync("pimalogik@gmail.com",
                     user.Email,
-                     "Potwierdzenie rejestracji",
-                     $"Kliknij w link, aby potwierdzić rejestrację: {confirmationLink}");
-
-
+                    "Please confirm your email",
+                    $"Please click on this link to confirm your email address: {confirmationLink}");
 
                 return RedirectToPage("/Account/Login");
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("Register", error.Description);
+                }
+
+                return Page();
             }
 
         }

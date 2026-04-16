@@ -13,14 +13,19 @@ namespace ASP.NET_IDENTITY.Pages.Account
 
         [BindProperty]
         public UserProfileViewModel UserProfile { get; set; }
+        [BindProperty]
+        public string? SuccessMessage { get; set; }
 
         public UserProfileModel(UserManager<User> userManager)
         {
             this.userManager = userManager;
             this.UserProfile = new UserProfileViewModel();
         }
+
+        // Get odpowiada za pobranie aktualnych danych użytkownika i wyświetlenie ich w zakładce UserProfile
         public async Task<IActionResult> OnGetAsync()
         {
+            this.SuccessMessage = string.Empty;
             var (user, departmentClaim, positionClaim) = await GetUserInfoAsync();
 
             if (user != null)
@@ -56,6 +61,9 @@ namespace ASP.NET_IDENTITY.Pages.Account
             {
                 ModelState.AddModelError("UserProfile", "An error occurred while updating your profile. Please try again.");
             }
+            
+            this.SuccessMessage = "The user profile has been updated successfully.";
+
             return Page();
             
         }

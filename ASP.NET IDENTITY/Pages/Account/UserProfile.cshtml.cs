@@ -2,6 +2,8 @@ using ASP.NET_IDENTITY.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 
 namespace ASP.NET_IDENTITY.Pages.Account
 {
@@ -9,12 +11,80 @@ namespace ASP.NET_IDENTITY.Pages.Account
     {
         private readonly UserManager<User> userManager;
 
+        [BindProperty]
+        public UserProfileViewModel UserProfile { get; set; }
+
         public UserProfileModel(UserManager<User> userManager)
         {
             this.userManager = userManager;
+            this.UserProfile = new UserProfileViewModel();
         }
-        public void OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
+            var (user, departmentClaim, positionClaim) = await GetUserInfoAsync();
+
+            if (user != null)
+            {
+                this.UserProfile.Email = User.Identity?.Name ?? string.Empty;
+                this.UserProfile.Department = departmentClaim?.Value ?? string.Empty;
+                this.UserProfile.Position = positionClaim?.Value ?? string.Empty;
+            }   
+            return Page();
         }
+
+        // Post odpowiada za aktualizację danych użytkownika, w tym przypadku działu i stanowiska jeśli zostaną one zmienione w zakładce UserProfile
+        public async Task<IActionResult> OnPostAsync()
+        {
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+
+            try
+            {
+                var (user, departmentClaim, positionClaim) = await GetUserInfoAsync();
+                if (user != null && departmentClaim != null)
+                {
+                    await userManager.ReplaceClaimAsync(user, departmentClaim, new Claim(departmentClaim.Type, UserProfile.Department ?? string.Empty));
+                }
+                if (user != null && positionClaim != null)
+                {
+                    await userManager.ReplaceClaimAsync(user, positionClaim, new Claim(positionClaim.Type, UserProfile.Position ?? string.Empty));
+                }
+            }
+            catch 
+            {
+                ModelState.AddModelError("UserProfile", "An error occurred while updating your profile. Please try again.");
+            }
+            return Page();
+            
+        }
+
+        // Tworzę metodę która zwraca user claim itp
+        private async Task<(User? user, Claim? departmentClaim, Claim? positionClaim)> GetUserInfoAsync()
+        {
+            var user = await userManager.FindByNameAsync(User.Identity?.Name ?? string.Empty);
+            if (user != null)
+            {
+                var claims = await userManager.GetClaimsAsync(user);
+                var departmentClaim = claims.FirstOrDefault(c => c.Type == "Department");
+                var positionClaim = claims.FirstOrDefault(c => c.Type == "Position");
+                return (user, departmentClaim, positionClaim);
+            }
+            else
+            {
+                return (null, null, null);
+            }
+        }
+
+    }
+
+    public class UserProfileViewModel
+    {
+        public string? Email { get; set; }
+        [Required]
+        public string? Department { get; set; }
+        [Required]
+        public string? Position { get; set; }
     }
 }

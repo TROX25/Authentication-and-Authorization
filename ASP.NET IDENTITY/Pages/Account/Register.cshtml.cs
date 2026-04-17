@@ -58,6 +58,7 @@ namespace ASP.NET_IDENTITY.Pages.Account
 
                 //////////////////////////////////////////////////////////////
                 // To trigger the email confirmation flow, use the code below
+                // If email confirmation is not required,  comment code below and uncomment the code above ->
                 //////////////////////////////////////////////////////////////
 
                 var confirmationLink = Url.PageLink(pageName: "/Account/ConfirmEmail",
@@ -70,6 +71,7 @@ namespace ASP.NET_IDENTITY.Pages.Account
 
                 return RedirectToPage("/Account/Login");
             }
+
             else
             {
                 foreach (var error in result.Errors)

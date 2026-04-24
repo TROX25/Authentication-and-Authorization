@@ -27,6 +27,10 @@ namespace ASP.NET_IDENTITY.Pages.Account
         {
             this.SuccessMessage = string.Empty;
             var (user, departmentClaim, positionClaim) = await GetUserInfoAsync();
+            // w teorii zamiast tego Tuple mozna zrobic tak
+            // var user = await GetUserAsync();
+            // var departmentClaim = await GetDepartmentClaimAsync();
+            // var positionClaim = await GetPositionClaimAsync();
 
             if (user != null)
             {
@@ -68,7 +72,8 @@ namespace ASP.NET_IDENTITY.Pages.Account
             
         }
 
-        // Tworzę metodę która zwraca user claim itp
+        // Tworzę metodę która zwraca user departmentclaim i postionclaim w jednym wywołaniu, dzięki temu unikam wielokrotnego pobierania tych samych danych z bazy danych, co jest bardziej efektywne.
+        // Zamiast tego można by było zrobić trzy osobne metody GetUserAsync(), GetDepartmentClaimAsync() i GetPositionClaimAsync() ale wtedy trzeba by było trzykrotnie pobierać dane z bazy danych, co jest mniej efektywne
         private async Task<(User? user, Claim? departmentClaim, Claim? positionClaim)> GetUserInfoAsync()
         {
             var user = await userManager.FindByNameAsync(User.Identity?.Name ?? string.Empty);

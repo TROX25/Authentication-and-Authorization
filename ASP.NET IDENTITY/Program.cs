@@ -12,7 +12,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Connection String znajduje sie w app.settings.json
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
+// rejestruje cały system Identity, w tym UserManager<User>, SignInManager<User>, RoleManager<IdentityRole> w kontenerze DI
+// AddEntityFrameworkStores<AppDbContext>() — mówi Identity żeby zapisywał dane (użytkowników, role, claims) do bazy przez EF Core
+// dodaje generatory tokenów np. do resetowania hasła
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
     options.Password.RequireDigit = true;

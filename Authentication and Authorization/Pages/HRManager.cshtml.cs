@@ -13,12 +13,12 @@ namespace Authentication_and_Authorization.Pages
     [Authorize(Policy = "HRManagerOnly")]
     public class HRManagerModel : PageModel
     {
-        private readonly IHttpClientFactory httpClientFactory;
+        private readonly IHttpClientFactory _httpClientFactory;
         public List<WeatherForecastDTO>? weatherForecastItems { get; set; }
 
         public HRManagerModel(IHttpClientFactory httpClientFactory)
         {
-            this.httpClientFactory = httpClientFactory;
+            _httpClientFactory = httpClientFactory;
         }
         public async Task OnGetAsync()
         {
@@ -45,7 +45,7 @@ namespace Authentication_and_Authorization.Pages
                 token = await AuthenticateAndGetTokenAsync();
             }
 
-            var client = httpClientFactory.CreateClient("TestWebAPI");
+            var client = _httpClientFactory.CreateClient("TestWebAPI");
             // Teraz mając token, chce go wysłać razem z requestem
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token?.AccessToken ?? string.Empty);
             // WeatherForecast to nazwa kontrolera w WebAPI, który zwraca dane pogodowe. Musi być zgodna z nazwą kontrolera w WebAPI (WeatherForecastController).
@@ -55,7 +55,7 @@ namespace Authentication_and_Authorization.Pages
         private async Task<JwtToken> AuthenticateAndGetTokenAsync()
         {
             // tak samo jak client z program.cs
-            var client = httpClientFactory.CreateClient("TestWebAPI");
+            var client = _httpClientFactory.CreateClient("TestWebAPI");
             // DODAJE authentykację do żądania HTTP, aby uzyskać dostęp do chronionego zasobu w WebAPI. Musze zrobic post Credential
             var response = await client.PostAsJsonAsync("Auth", new Credential { UserName = "admin", Password = "admin" });
             // Sprawdzam, czy odpowiedź HTTP jest sukcesem (status code 2xx). Jeśli nie, to rzuca wyjątek.

@@ -10,11 +10,11 @@ builder.Services.AddRazorPages();
 builder.Services.AddAuthentication().AddCookie(MyCookie, options =>
 {
     options.Cookie.Name = MyCookie;
-    // moge uzyc accessdeniedpath aby przekierowac uzytkownika w przypadku braku uprawnien do danej strony
+    // moge uzyc accessdeniedpath, aby przekierowac uzytkownika w przypadku braku uprawnien do danej strony
     // options.AccessDeniedPath = "/Account/AccessDenied";
 
-    // po 30 minutach bedzie sie trzeba znowu zalogowac. W przypadku zakniecia przegladarki cookie zniknie i bedzie trzeba sie znowu zalogowac
-    // Trzeba dodatkowo ustawic persistent cookie jesli u�ytkownik zaznaczy "Remember Me"
+    // Po 30 minutach bedzie się trzeba znowu zalogowac. W przypadku zamknięcia przegladarki cookie zniknie i bedzie trzeba się znowu zalogowac
+    // Trzeba dodatkowo ustawic persistent cookie jesli użytkownik zaznaczy "Remember Me"
     options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
 });
 builder.Services.AddAuthorization(options =>

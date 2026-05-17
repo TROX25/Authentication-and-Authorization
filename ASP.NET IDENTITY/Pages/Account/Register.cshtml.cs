@@ -14,12 +14,12 @@ namespace ASP.NET_IDENTITY.Pages.Account
     public class RegisterModel : PageModel
     {
         private readonly UserManager<User> userManager;
-        private readonly IEmailService emailService;
+        private readonly IEmailService _emailService;
 
         public RegisterModel(UserManager<User> userManager, IEmailService emailService)
         {
             this.userManager = userManager;
-            this.emailService = emailService;
+            _emailService = emailService;
         }
 
         [BindProperty]
@@ -64,11 +64,11 @@ namespace ASP.NET_IDENTITY.Pages.Account
                 var confirmationLink = Url.PageLink(pageName: "/Account/ConfirmEmail",
                     values: new { userId = user.Id, token = confirmationToken }) ?? "";
 
-                await emailService.SendEmailAsync("pimalogik@gmail.com",
+                await _emailService.SendEmailAsync("pimalogik@gmail.com",
                     user.Email,
                     "Please confirm your email",
                     $"Please click on this link to confirm your email address: {confirmationLink}");
-
+                S
                 return RedirectToPage("/Account/Login");
             }
 
